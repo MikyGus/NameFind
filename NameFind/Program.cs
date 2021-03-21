@@ -1,38 +1,30 @@
 ﻿using System;
+using System.IO;
 
 namespace NameFind
 {
 
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             var rand = new Random();
-            string[] NameList =
+            const string filePath = @"Names.txt";
+            if (!File.Exists(filePath))
             {
-                "Mikael",
-                "Marie",
-                "Liam",
-                "Noah",
-                "Oliver",
-                "William",
-                "Elijah",
-                "James",
-                "Benjamin"
-            };
+                Console.WriteLine($"File: {filePath}, not found!");
+                return 1;
+            }
+            string[] NameList = File.ReadAllLines(filePath);
             char GuessedKey;
-            int tries = 5;
+            int tries = 10;
             string secretName = NameList[rand.Next(NameList.Length)];
 
-            //Console.WriteLine("Five random integers between 50 and 100:");
-            //for (int ctr = 0; ctr <= 4; ctr++)
-            //    Console.Write("{0,8:N0}", rand.Next(0, NameList.Length));
-            Console.WriteLine($"Pssst, secret is: {secretName}");
-
+            //Console.WriteLine($"Pssst, secret is: {secretName}");
 
             SecretWord s = new SecretWord(secretName);
 
-            //Console.Clear();
+            Console.Clear();
             Console.WriteLine("Guess the secret name:");
             do
             {
@@ -65,6 +57,7 @@ namespace NameFind
                 };
                 ConsoleIO.PrintMessages(Message, ConsoleColor.Red);
             }
+            return 0;
         }
     }
 }
