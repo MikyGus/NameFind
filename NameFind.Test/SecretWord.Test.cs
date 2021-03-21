@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NameFind;
 using System;
 
 namespace NameFind.Test

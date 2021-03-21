@@ -2,15 +2,38 @@
 
 namespace NameFind
 {
+
     class Program
     {
         static void Main(string[] args)
         {
+            var rand = new Random();
+            string[] NameList =
+            {
+                "Mikael",
+                "Marie",
+                "Liam",
+                "Noah",
+                "Oliver",
+                "William",
+                "Elijah",
+                "James",
+                "Benjamin"
+            };
             char GuessedKey;
             int tries = 5;
-            SecretWord s = new SecretWord("Mikael");
+            string secretName = NameList[rand.Next(NameList.Length)];
 
-            Console.Clear();
+            //Console.WriteLine("Five random integers between 50 and 100:");
+            //for (int ctr = 0; ctr <= 4; ctr++)
+            //    Console.Write("{0,8:N0}", rand.Next(0, NameList.Length));
+            Console.WriteLine($"Pssst, secret is: {secretName}");
+
+
+            SecretWord s = new SecretWord(secretName);
+
+            //Console.Clear();
+            Console.WriteLine("Guess the secret name:");
             do
             {
                 ConsoleIO.WriteCharsRow(s.GuessDict);
