@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace NameFind
 {
@@ -30,12 +31,20 @@ namespace NameFind
             char[] hidden_chars = hidden.ToCharArray();
             guess = char.ToUpper(guess);
             bool isFound = false;
+            string guessStr = Convert.ToString(guess);
             for (int i = 0; i < secret.Length; i++)
             {
-                if (secret[i] == guess)
+                if (string.Compare(guessStr, Convert.ToString(secret[i]), CultureInfo.CurrentCulture, CompareOptions.IgnoreNonSpace) == 0)
+                //if (secret[i] == guess)
                 {
-                    hidden_chars[i] = guess;
+                    hidden_chars[i] = secret[i];
                     isFound = true;
+
+
+                    //string s1 = "héllo";
+                    //string s2 = "hello";
+                    //Assert.AreEqual(string.Compare(guessStr, secret[i], CultureInfo.CurrentCulture, CompareOptions.IgnoreNonSpace), 0);
+
                 }
             }
             hidden = new string(hidden_chars);
