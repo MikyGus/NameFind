@@ -1,23 +1,20 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Globalization;
 
 namespace NameFind.Test
 {
     [TestClass]
     public class SecretWord_Tests
     {
-        [TestMethod]
-        public void Create_HiddenWordMikael_6stars()
-        {
-            SecretWord s = new SecretWord("Mikael");
-            Assert.AreEqual("******", s.Hidden);
-        }
 
-        [TestMethod]
-        public void Create_HiddenWordBob_3stars()
+        [DataTestMethod]
+        [DataRow("Mikael", "******")]
+        [DataRow("Bob","***")]
+        public void Create_HiddenWord_Stars(string hiddenWord, string starString)
         {
-            SecretWord s = new SecretWord("Bob");
-            Assert.AreEqual("***", s.Hidden);
+            SecretWord s = new SecretWord(hiddenWord);
+            Assert.AreEqual(starString, s.Hidden);
         }
 
         [TestMethod]
@@ -38,91 +35,49 @@ namespace NameFind.Test
             });
         }
 
-        [TestMethod]
-        public void GuessChar_KeyAonMikael_HiddenSSSASS()
+        [DataTestMethod]
+        [DataRow("Mikael", 'A', true, "***A**")]
+        [DataRow("Mikael", 'K', true, "**K***")]
+        [DataRow("Mikael", 'k', true, "**K***")]
+        [DataRow("Mikael", 'O', false, "******")]
+        [DataRow("André", 'E', true, "****É")]
+        [DataRow("Bob", 'B', true, "B*B")]
+        public void GuessChar_KeyEntered_HiddenStars(string hiddenWord, char keyEntered, bool isKeyFound_expected, string starString_expected)
         {
-            SecretWord s = new SecretWord("Mikael");
-            bool b = s.GuessChar('A');
-            Assert.AreEqual("***A**", s.Hidden);
-            Assert.IsTrue(b);
+            SecretWord s = new SecretWord(hiddenWord);
+            bool b = s.GuessChar(keyEntered);
+            Assert.AreEqual(starString_expected, s.Hidden);
+            Assert.AreEqual(isKeyFound_expected, b);
         }
+        
+        // Check to make sure the hidden word is NOT found until all of the words characters have been enterd.
         [TestMethod]
-        public void GuessChar_KeyKonMikael_HiddenSSKSSS()
+        public void GuessChar_KeyEntered_isHiddenFound()
         {
-            SecretWord s = new SecretWord("Mikael");
-            bool b = s.GuessChar('K');
-            Assert.AreEqual("**K***", s.Hidden);
-            Assert.IsTrue(b);
-        }
-        [TestMethod]
-        public void GuessChar_KeykonMikael_HiddenSSKSSS()
-        {
-            SecretWord s = new SecretWord("Mikael");
-            bool b = s.GuessChar('k');
-            Assert.AreEqual("**K***", s.Hidden);
-            Assert.IsTrue(b);
-        }
-        [TestMethod]
-        public void GuessChar_KeyOonMikael_HiddenSSSSSS()
-        {
-            SecretWord s = new SecretWord("Mikael");
-            bool b = s.GuessChar('O');
-            Assert.AreEqual("******", s.Hidden);
-            Assert.IsFalse(b);
+            string hiddenWord = "Mikael";
+            SecretWord s = new SecretWord(hiddenWord);
+            for (int i = 0; i<hiddenWord.Length; i++)
+            {
+                s.GuessChar(hiddenWord[i]);
+                Assert.AreEqual(!(i < hiddenWord.Length - 1), s.IsFound, $"Tested char: { hiddenWord[i] } at index { i }");
+            }
         }
 
-        [TestMethod]
-        public void GuessChar_KeyMonMikael_ISFoundFalse()
-        {
-            SecretWord s = new SecretWord("Mikael");
-            bool b = s.GuessChar('M');
-            Assert.AreEqual("M*****", s.Hidden);
-            Assert.IsTrue(b);
-            Assert.IsFalse(s.IsFound);
-        }
-        [TestMethod]
-        public void GuessChar_KeyMIKAELonMikael_ISFoundTrue()
-        {
-            SecretWord s = new SecretWord("Mikael");
-            s.GuessChar('M');
-            s.GuessChar('I');
-            s.GuessChar('K');
-            s.GuessChar('A');
-            s.GuessChar('E');
-            s.GuessChar('L');
-            Assert.AreEqual("MIKAEL", s.Hidden);
-            Assert.IsTrue(s.IsFound);
-        }
-
-        [TestMethod]
-        public void GuessDictionary_NoKeyonMikael_EmptyDictionary()
+        [DataTestMethod]
+        [DataRow('A', true)]
+        [DataRow('K', true)]
+        [DataRow('O', false)]
+        public void GuessDictionary_KeyKonMikael_isDictionaryKeyKValue(char keyEntered, bool isKeyFound_expected)
         {
             SecretWord s = new SecretWord("Mikael");
             Assert.AreEqual(0, s.GuessDict.Count);
-        }
-        [TestMethod]
-        public void GuessDictionary_KeyKonMikael_DictionaryKeyKValueTrue()
-        {
-            SecretWord s = new SecretWord("Mikael");
-            s.GuessChar('K');
-            s.GuessChar('K'); //To make sure it doesn't throw an exception
+            s.GuessChar(keyEntered);
+            s.GuessChar(keyEntered); //Dublicate: To make sure it doesn't throw an exception
             Assert.AreEqual(1, s.GuessDict.Count);
             bool value;
-            Assert.IsTrue(s.GuessDict.TryGetValue('K', out value));
-            Assert.IsTrue(value);
+            Assert.IsTrue(s.GuessDict.TryGetValue(keyEntered, out value));
+            Assert.AreEqual(isKeyFound_expected, value);
         }
-        [TestMethod]
-        public void GuessDictionary_KeyOonMikael_DictionaryKeyOValueFalse()
-        {
-            SecretWord s = new SecretWord("Mikael");
-            s.GuessChar('O');
-            s.GuessChar('O'); //To make sure it doesn't throw an exception
-            Assert.AreEqual(1, s.GuessDict.Count);
-            Assert.IsTrue(s.GuessDict.TryGetValue('O', out bool value));
-            Assert.IsFalse(value);
-        }
-
-
 
         internal static void AssertThrows<exception>(Action method)
                                     where exception : Exception
