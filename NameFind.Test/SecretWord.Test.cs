@@ -11,10 +11,10 @@ namespace NameFind.Test
         [DataTestMethod]
         [DataRow("Mikael", "******")]
         [DataRow("Bob","***")]
-        public void Create_HiddenWord_Stars(string hiddenWord, string starString)
+        public void Create_HiddenWord_Stars(string hiddenWord, string starString_expected)
         {
             SecretWord s = new SecretWord(hiddenWord);
-            Assert.AreEqual(starString, s.Hidden);
+            Assert.AreEqual(starString_expected, s.Hidden);
         }
 
         [TestMethod]
@@ -51,6 +51,7 @@ namespace NameFind.Test
         }
         
         // Check to make sure the hidden word is NOT found until all of the words characters have been enterd.
+        // Note that if the hidden word have non unique charcaters. Eg., BOB; SUSANNE, then test will fail.
         [TestMethod]
         public void GuessChar_KeyEntered_isHiddenFound()
         {
