@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace NameFind.Test
@@ -10,7 +11,7 @@ namespace NameFind.Test
 
         [DataTestMethod]
         [DataRow("Mikael", "******")]
-        [DataRow("Bob","***")]
+        [DataRow("Bob", "***")]
         public void Create_HiddenWord_Stars(string hiddenWord, string starString_expected)
         {
             SecretWord s = new SecretWord(hiddenWord);
@@ -49,18 +50,18 @@ namespace NameFind.Test
             Assert.AreEqual(starString_expected, s.Hidden);
             Assert.AreEqual(isKeyFound_expected, b);
         }
-        
-        // Check to make sure the hidden word is NOT found until all of the words characters have been enterd.
-        // Note that if the hidden word have non unique charcaters. Eg., BOB; SUSANNE, then test will fail.
-        [TestMethod]
-        public void GuessChar_KeyEntered_isHiddenFound()
+
+        //// Check to make sure the hidden word is NOT found until all of the words characters have been entered.
+        [DataTestMethod]
+        [DataRow("Mikael", "MIKAEL", "FFFFFT")]
+        [DataRow("Bob", "BO", "FT")]
+        public void GuessChar_KeyEntered_isHiddenFound(string hiddenWord, string keysEntered, string isWordFound_expected)
         {
-            string hiddenWord = "Mikael";
             SecretWord s = new SecretWord(hiddenWord);
-            for (int i = 0; i<hiddenWord.Length; i++)
+            for (int i = 0; i < keysEntered.Length; i++)
             {
-                s.GuessChar(hiddenWord[i]);
-                Assert.AreEqual(!(i < hiddenWord.Length - 1), s.IsFound, $"Tested char: { hiddenWord[i] } at index { i }");
+                s.GuessChar(keysEntered[i]);
+                Assert.AreEqual((isWordFound_expected[i] == 'T'), s.IsFound, $"Tested char: { keysEntered[i] } at index { i } expected { isWordFound_expected[i] }");
             }
         }
 

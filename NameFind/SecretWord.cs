@@ -35,16 +35,9 @@ namespace NameFind
             for (int i = 0; i < secret.Length; i++)
             {
                 if (string.Compare(guessStr, Convert.ToString(secret[i]), CultureInfo.CurrentCulture, CompareOptions.IgnoreNonSpace) == 0)
-                //if (secret[i] == guess)
                 {
                     hidden_chars[i] = secret[i];
                     isFound = true;
-
-
-                    //string s1 = "héllo";
-                    //string s2 = "hello";
-                    //Assert.AreEqual(string.Compare(guessStr, secret[i], CultureInfo.CurrentCulture, CompareOptions.IgnoreNonSpace), 0);
-
                 }
             }
             hidden = new string(hidden_chars);
