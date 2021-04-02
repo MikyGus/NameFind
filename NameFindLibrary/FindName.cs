@@ -12,9 +12,9 @@ namespace NameFindLibrary
         public int MaxTries { get { return maxTries; } }
         public int TriesLeft { get; private set; }
         public Dictionary<char, bool> GuessDict { get; private set; } = new();
-        private SecretWord secret { get; set; }
-        public string Secret { get { return secret.Secret; } }
-        public string Hidden { get { return secret.Hidden; } }
+        private SecretWord SecretW { get; set; }
+        public string Secret { get { return SecretW.Secret; } }
+        public string Hidden { get { return SecretW.Hidden; } }
         public bool IsGameOver 
         { 
             get { return IsSecretFound || (TriesLeft <= 0); } 
@@ -50,13 +50,13 @@ namespace NameFindLibrary
 
             WordFile f = new();
             string secret = f.GetRandomWord();
-            this.secret = new(secret);
+            this.SecretW = new(secret);
         }
 
         public bool GuessChar(char guessChar)
         {
             guessChar = Char.ToUpper(guessChar);
-            bool IsFound = secret.GuessChar(guessChar);
+            bool IsFound = SecretW.GuessChar(guessChar);
             if (!IsFound)
                 TriesLeft--;
             GuessDict.TryAdd(guessChar, IsFound);

@@ -80,23 +80,7 @@ namespace NameFindLibrary.Test
             }
         }
 
-        [Theory]
-        [InlineData('C', false)]
-        [InlineData('M', true)]
-        [InlineData('i', true)]
-        public void GuessDict_KeyFoundStored(char keyEntered, bool isKeyFound_Expected)
-        {
-            SecretWord s = new("Mikael");
-            Assert.Empty(s.GuessDict);
 
-            s.GuessChar(keyEntered);
-            Assert.Single(s.GuessDict);
-            s.GuessChar(keyEntered);  // Duplication to make sure no exception is thrown
-            Assert.Single(s.GuessDict);
-
-            bool actual = s.GuessDict[Char.ToUpper(keyEntered)];
-            Assert.Equal(isKeyFound_Expected, actual); 
-        }
 
     }
 }

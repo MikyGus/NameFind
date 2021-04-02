@@ -35,7 +35,7 @@ namespace NameFindLibrary.Test
         [Fact]
         public void GetWordList_SuccessfullyGetsListOfNames()
         {
-            WordFile s = new WordFile();
+            WordFile s = new();
             string[] actual_list = s.GetWordList();
             Assert.True(actual_list.Length > 0);
         }
@@ -45,7 +45,7 @@ namespace NameFindLibrary.Test
         [InlineData("InvalidTextfile.txt")]
         public void GetWordList_ThrowEceptionInvalidFilePath(string fileName)
         {
-            WordFile s = new WordFile()
+            WordFile s = new()
             {
                 FilePath = "",
                 FileName = fileName
@@ -57,7 +57,7 @@ namespace NameFindLibrary.Test
         [Fact]
         public void GetRandomWord_SuccessfullyGetRandomWordFromList()
         {
-            WordFile s = new WordFile();
+            WordFile s = new();
             string[] Words = s.GetWordList();
             string actual = s.GetRandomWord();
             Assert.False(string.IsNullOrEmpty(actual));
@@ -67,7 +67,7 @@ namespace NameFindLibrary.Test
         [Fact]
         public void GetRandomWord_DifferentRandomWord()
         {
-            WordFile s = new WordFile();
+            WordFile s = new();
             string word1 = s.GetRandomWord();
             string word2 = s.GetRandomWord();
             Assert.NotEqual(word1, word2);

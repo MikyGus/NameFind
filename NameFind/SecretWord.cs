@@ -8,14 +8,14 @@ namespace NameFind
     {
         private const string ErrorMsgSecretWordEmpty = "Secret word is empty!";
         private const char HiddenChar = '*';
-        private string secret = "";
+        private readonly string secret = "";
         private string hidden = "";
         private readonly Dictionary<char, bool> guessDict = new();
 
         public SecretWord(string secret)
         {
             if (string.IsNullOrEmpty(secret))
-                throw new ArgumentOutOfRangeException(paramName: "secret", message: ErrorMsgSecretWordEmpty, actualValue: "");
+                throw new ArgumentOutOfRangeException(paramName: nameof(secret), message: ErrorMsgSecretWordEmpty, actualValue: "");
             this.secret = secret.ToUpper();
             this.hidden = new string(HiddenChar, secret.Length);
         }
