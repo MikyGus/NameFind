@@ -10,7 +10,7 @@ namespace NameFind
         private const char HiddenChar = '*';
         private string secret = "";
         private string hidden = "";
-        private Dictionary<char, bool> guessDict = new Dictionary<char, bool>();
+        private readonly Dictionary<char, bool> guessDict = new();
 
         public SecretWord(string secret)
         {
